@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.adapter = new PupusasAdapter(this);
 
+        this.textview_message = (TextView) this.findViewById(R.id.textview_message);
         this.recycler_view = (RecyclerView) this.findViewById(R.id.recycler_view);
         this.recycler_view.setLayoutManager(new LinearLayoutManager(this));
         this.recycler_view.setAdapter(this.adapter);
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         String mMessage = getEmojiByUnicode(0x1F631) +" \n "+ getResources().getString(R.string.main_message_no_item_into_the_list);
 
-        this.textview_message = (TextView) this.findViewById(R.id.textview_message);
+
         this.textview_message.setText(mMessage);
 
 
@@ -107,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.menu_clean_list) {
+            cleanList();
             return true;
         }
 
@@ -129,8 +131,10 @@ public class MainActivity extends AppCompatActivity {
     private void viewElementsAtributes(){
         if(this.adapter.getSizeElements() > 0) {
             this.recycler_view.setVisibility(View.VISIBLE);
+            this.textview_message.setVisibility(View.INVISIBLE);
         }else{
             this.recycler_view.setVisibility(View.INVISIBLE);
+            this.textview_message.setVisibility(View.VISIBLE);
         }
     }
 
@@ -174,13 +178,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void addNewPupusaItem(Pupusa pp){
-
         realm.beginTransaction();
         Pupusa pupusa = realm.copyToRealm(pp);
         realm.commitTransaction();
-
         this.adapter.setItemData(pp);
-
         viewElementsAtributes();
     }
 
@@ -190,4 +191,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void cleanList(){
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.app_name)
+                .setMessage("¿Deseas borrar la lista completa?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        realm.beginTransaction();
+                        realm.delete(Pupusa.class);
+                        adapter.clearData();
+                        realm.commitTransaction();
+                        viewElementsAtributes();
+
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .create().show();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(this.realm !=null){
+            realm.close();
+        }
+    }
 }

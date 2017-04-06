@@ -70,6 +70,10 @@ public class PupusasAdapter extends RecyclerView.Adapter<PupusasAdapter.Holder>{
         return this.data.size();
     }
 
+    public void clearData(){
+        this.data.clear();
+        this.notifyDataSetChanged();
+    }
 
 
     public class Holder extends RecyclerView.ViewHolder{

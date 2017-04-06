@@ -16,5 +16,6 @@
     </string-array>
 
     <string name="main_message_no_item_into_the_list">No tienes elementos añadidos</string>
+    <string name="action_clear_list">Limpiar Lista</string>
 
 </resources>
