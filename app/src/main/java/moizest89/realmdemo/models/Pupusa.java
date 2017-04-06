@@ -13,6 +13,9 @@ public class Pupusa extends RealmObject {
     private int type;
     private int qty;
 
+    public Pupusa() {
+    }
+
     public long getId() {
         return id;
     }

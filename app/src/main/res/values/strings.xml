@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">RealmDemo</string>
     <string name="action_settings">Settings</string>
+
+    <string-array name="basic_flavour">
+        <item>Queso</item>
+        <item>Frijol</item>
+        <item>Chicharron</item>
+        <item>Revuelta</item>
+        <item>Frijol y Queso</item>
+        <item>Queso con Chicharron</item>
+    </string-array>
+    <string-array name="basic_types">
+        <item>Maiz</item>
+        <item>Arroz</item>
+    </string-array>
+
+    <string name="main_message_no_item_into_the_list">No tienes elementos añadidos</string>
+
 </resources>

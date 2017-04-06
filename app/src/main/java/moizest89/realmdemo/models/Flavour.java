@@ -9,6 +9,14 @@ import io.realm.RealmObject;
 public class Flavour extends RealmObject {
 
     private String name;
+    private boolean isDefault = true;
+
+    public Flavour() {
+    }
+
+    public Flavour(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;
@@ -16,5 +24,13 @@ public class Flavour extends RealmObject {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 }
