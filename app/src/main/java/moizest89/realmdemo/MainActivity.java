@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,8 +27,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import io.realm.ObjectChangeSet;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmList;
+import io.realm.RealmObjectChangeListener;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import moizest89.realmdemo.models.Flavour;
@@ -42,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recycler_view;
     private PupusasAdapter adapter;
     private TextView textview_message;
+    private NestedScrollView nested_main;
+    private TextView textview_total_items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,24 +57,25 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        //BindView
+        this.nested_main = (NestedScrollView) this.findViewById(R.id.nested_main);
+        this.textview_message = (TextView) this.findViewById(R.id.textview_message);
+        this.textview_total_items = (TextView) this.findViewById(R.id.textview_total_items);
+        this.recycler_view = (RecyclerView) this.findViewById(R.id.recycler_view);
+
         this.realm = MyRealm.with(this);
 
-        this.adapter = new PupusasAdapter(this);
 
-        this.textview_message = (TextView) this.findViewById(R.id.textview_message);
-        this.recycler_view = (RecyclerView) this.findViewById(R.id.recycler_view);
+        this.adapter = new PupusasAdapter(this);
         this.recycler_view.setLayoutManager(new LinearLayoutManager(this));
         this.recycler_view.setAdapter(this.adapter);
-
-        loadMainData();
-
         String mMessage = getEmojiByUnicode(0x1F631) +" \n "+ getResources().getString(R.string.main_message_no_item_into_the_list);
-
-
         this.textview_message.setText(mMessage);
 
 
-
+        //Data
+        loadMainData();
         this.mFlavour = this.getResources().getStringArray(R.array.basic_flavour);
         this.mTypes = this.getResources().getStringArray(R.array.basic_types);
 
@@ -127,13 +134,40 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setTotalItems(){
+        RealmResults<Pupusa> result = realm.where(Pupusa.class).findAllAsync();
+        result.addChangeListener(new RealmChangeListener<RealmResults<Pupusa>>() {
+            @Override
+            public void onChange(RealmResults<Pupusa> results) {
+
+                Log.e(TAG, "element: "+results);
+                long sum = results.sum(Pupusa.QTY).longValue();
+                Log.e(TAG, "qty: "+sum);
+
+                textview_total_items.setText("Total de pupusas: "+sum);
+            }
+        });
+
+        RealmObjectChangeListener<Pupusa> listener = new RealmObjectChangeListener<Pupusa>() {
+            @Override
+            public void onChange(Pupusa object, ObjectChangeSet changeSet) {
+                Log.e(TAG, "object: "+object);
+                Log.e(TAG, "changeSet: "+changeSet);
+            }
+        };
+
+
+        result.asObservable()
+
+    }
 
     private void viewElementsAtributes(){
         if(this.adapter.getSizeElements() > 0) {
-            this.recycler_view.setVisibility(View.VISIBLE);
+            this.nested_main.setVisibility(View.VISIBLE);
             this.textview_message.setVisibility(View.INVISIBLE);
+            setTotalItems();
         }else{
-            this.recycler_view.setVisibility(View.INVISIBLE);
+            this.nested_main.setVisibility(View.INVISIBLE);
             this.textview_message.setVisibility(View.VISIBLE);
         }
     }

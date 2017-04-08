@@ -8,6 +8,13 @@ import io.realm.RealmObject;
 
 public class Pupusa extends RealmObject {
 
+    public final static String ID = "id";
+    public final static String FLAVOUR = "flavour";
+    public final static String TYPE = "type";
+    public final static String QTY = "qty";
+
+
+
     private long id;
     private Flavour flavour;
     private int type;
