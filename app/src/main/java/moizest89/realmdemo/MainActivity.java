@@ -141,23 +141,12 @@ public class MainActivity extends AppCompatActivity {
             public void onChange(RealmResults<Pupusa> results) {
 
                 Log.e(TAG, "element: "+results);
-                long sum = results.sum(Pupusa.QTY).longValue();
+                int sum = results.sum(Pupusa.QTY).intValue();
                 Log.e(TAG, "qty: "+sum);
 
                 textview_total_items.setText("Total de pupusas: "+sum);
             }
         });
-
-        RealmObjectChangeListener<Pupusa> listener = new RealmObjectChangeListener<Pupusa>() {
-            @Override
-            public void onChange(Pupusa object, ObjectChangeSet changeSet) {
-                Log.e(TAG, "object: "+object);
-                Log.e(TAG, "changeSet: "+changeSet);
-            }
-        };
-
-
-        result.asObservable()
 
     }
 
