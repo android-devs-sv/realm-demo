@@ -3,7 +3,6 @@ package moizest89.realmdemo;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,20 +18,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
-import io.realm.ObjectChangeSet;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
-import io.realm.RealmList;
-import io.realm.RealmObjectChangeListener;
-import io.realm.RealmQuery;
+
 import io.realm.RealmResults;
 import moizest89.realmdemo.models.Flavour;
 import moizest89.realmdemo.models.Pupusa;
@@ -64,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         this.textview_total_items = (TextView) this.findViewById(R.id.textview_total_items);
         this.recycler_view = (RecyclerView) this.findViewById(R.id.recycler_view);
 
+
+        //
         this.realm = MyRealm.with(this);
 
 
